@@ -220,7 +220,7 @@ async function sendQuotesToServer() {
 // ------------------------------
 // Sync with Server
 // ------------------------------
-function syncWithServer() {
+function syncQuotes() {
   fetchQuotesFromServer().then((fetchedQuotes) => {
     let localQuotesMap = new Map(quotes.map(q => [q.text, q]));
     let updated = false;
@@ -271,8 +271,8 @@ function showNotification(message) {
 // Start Sync Interval
 // ------------------------------
 function startSyncing() {
-  syncWithServer();
-  setInterval(syncWithServer, 10000);
+  syncQuotes();
+  setInterval(syncQuotes, 10000);
 }
 
 // ------------------------------
