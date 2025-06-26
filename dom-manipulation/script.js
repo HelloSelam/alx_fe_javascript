@@ -239,7 +239,7 @@ function syncQuotes() {
       sendQuotesToServer();
       populateCategories();
       filterQuotes();
-      showNotification("Data synced with server. Server data was used to resolve conflicts.");
+      showNotification("Quotes synced with server!");
     }
   });
 }
