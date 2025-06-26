@@ -17,22 +17,19 @@ const filteredQuotesContainer = document.getElementById('filteredQuotes');
 const newQuoteBtn = document.getElementById('newQuote');
 
 // ------------------------------
-// Populate Categories in Filters
+// Populate Categories
 // ------------------------------
 function populateCategories() {
   const categories = [...new Set(quotes.map(q => q.category))];
 
-  // For the quote generator dropdown
   if (categorySelect) {
     categorySelect.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
   }
 
-  // For the filter dropdown
   if (categoryFilter) {
     categoryFilter.innerHTML = `<option value="all">All Categories</option>` +
       categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
-    
-    // Restore last selected filter
+
     categoryFilter.value = lastSelectedCategory;
     filterQuotes();
   }
@@ -72,14 +69,14 @@ function addQuote() {
 }
 
 // ------------------------------
-// Save Quotes and Category Filter to Local Storage
+// Save Quotes to Local Storage
 // ------------------------------
 function saveQuotes() {
   localStorage.setItem('quotes', JSON.stringify(quotes));
 }
 
 // ------------------------------
-// Create Form Dynamically
+// Create Add Quote Form
 // ------------------------------
 function createAddQuoteForm() {
   const formContainer = document.getElementById('formContainer');
@@ -127,7 +124,7 @@ function exportToJsonFile() {
 // ------------------------------
 function importFromJsonFile(event) {
   const fileReader = new FileReader();
-  fileReader.onload = function(event) {
+  fileReader.onload = function (event) {
     try {
       const importedQuotes = JSON.parse(event.target.result);
       if (Array.isArray(importedQuotes)) {
@@ -147,7 +144,7 @@ function importFromJsonFile(event) {
 }
 
 // ------------------------------
-// Filter Quotes by Category
+// Filter Quotes
 // ------------------------------
 function filterQuotes() {
   const selected = categoryFilter.value;
@@ -158,7 +155,6 @@ function filterQuotes() {
     ? quotes
     : quotes.filter(q => q.category === selected);
 
-  // Clear and display
   filteredQuotesContainer.innerHTML = '';
   if (visibleQuotes.length > 0) {
     visibleQuotes.forEach(quote => {
@@ -172,7 +168,7 @@ function filterQuotes() {
 }
 
 // ------------------------------
-// Load Last Viewed Quote from Session
+// Load Last Viewed Quote
 // ------------------------------
 function loadLastViewedQuote() {
   const lastQuote = sessionStorage.getItem('lastQuote');
@@ -182,20 +178,7 @@ function loadLastViewedQuote() {
 }
 
 // ------------------------------
-// Event Listeners
-// ------------------------------
-newQuoteBtn?.addEventListener('click', showRandomQuote);
-
-// ------------------------------
-// Initialize App
-// ------------------------------
-populateCategories();
-createAddQuoteForm();
-loadLastViewedQuote();
-
-initializeApp();
-// ------------------------------
-// Step 1: Simulate Server Data
+// Simulated Server Quotes
 // ------------------------------
 let serverQuotes = [
   { text: "Do one thing every day that scares you.", category: "Courage" },
@@ -203,19 +186,18 @@ let serverQuotes = [
 ];
 
 // ------------------------------
-// Step 2: Simulate Fetching from Server
+// Simulate Server Fetch
 // ------------------------------
 function fetchServerQuotes() {
-  // Simulate fetch delay
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(serverQuotes);
-    }, 1000); // simulate 1s delay
+    }, 1000);
   });
 }
 
 // ------------------------------
-// Step 3: Data Sync with Conflict Resolution
+// Sync with Server
 // ------------------------------
 function syncWithServer() {
   fetchServerQuotes().then((fetchedQuotes) => {
@@ -225,7 +207,6 @@ function syncWithServer() {
     fetchedQuotes.forEach(serverQuote => {
       const localQuote = localQuotesMap.get(serverQuote.text);
       if (!localQuote || localQuote.category !== serverQuote.category) {
-        // Conflict or new quote — server takes precedence
         localQuotesMap.set(serverQuote.text, serverQuote);
         updated = true;
       }
@@ -242,7 +223,7 @@ function syncWithServer() {
 }
 
 // ------------------------------
-// Step 4: Notification to User
+// Show Notification
 // ------------------------------
 function showNotification(message) {
   const notification = document.createElement('div');
@@ -265,17 +246,19 @@ function showNotification(message) {
 }
 
 // ------------------------------
-// Step 5: Start Syncing Periodically
+// Start Sync Interval
 // ------------------------------
 function startSyncing() {
-  syncWithServer(); // initial sync
-  setInterval(syncWithServer, 10000); // sync every 10s
+  syncWithServer();
+  setInterval(syncWithServer, 10000);
 }
 
 // ------------------------------
-// Final Initialization
+// Initialize App
 // ------------------------------
 populateCategories();
 createAddQuoteForm();
 loadLastViewedQuote();
 startSyncing();
+
+newQuoteBtn?.addEventListener('click', showRandomQuote);
