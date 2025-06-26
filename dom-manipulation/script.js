@@ -192,3 +192,90 @@ newQuoteBtn?.addEventListener('click', showRandomQuote);
 populateCategories();
 createAddQuoteForm();
 loadLastViewedQuote();
+
+initializeApp();
+// ------------------------------
+// Step 1: Simulate Server Data
+// ------------------------------
+let serverQuotes = [
+  { text: "Do one thing every day that scares you.", category: "Courage" },
+  { text: "Success is not final, failure is not fatal.", category: "Motivation" },
+];
+
+// ------------------------------
+// Step 2: Simulate Fetching from Server
+// ------------------------------
+function fetchServerQuotes() {
+  // Simulate fetch delay
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(serverQuotes);
+    }, 1000); // simulate 1s delay
+  });
+}
+
+// ------------------------------
+// Step 3: Data Sync with Conflict Resolution
+// ------------------------------
+function syncWithServer() {
+  fetchServerQuotes().then((fetchedQuotes) => {
+    let localQuotesMap = new Map(quotes.map(q => [q.text, q]));
+    let updated = false;
+
+    fetchedQuotes.forEach(serverQuote => {
+      const localQuote = localQuotesMap.get(serverQuote.text);
+      if (!localQuote || localQuote.category !== serverQuote.category) {
+        // Conflict or new quote — server takes precedence
+        localQuotesMap.set(serverQuote.text, serverQuote);
+        updated = true;
+      }
+    });
+
+    if (updated) {
+      quotes = Array.from(localQuotesMap.values());
+      saveQuotes();
+      populateCategories();
+      filterQuotes();
+      showNotification("Data synced with server. Server data was used to resolve conflicts.");
+    }
+  });
+}
+
+// ------------------------------
+// Step 4: Notification to User
+// ------------------------------
+function showNotification(message) {
+  const notification = document.createElement('div');
+  notification.textContent = message;
+  notification.style.position = 'fixed';
+  notification.style.bottom = '10px';
+  notification.style.right = '10px';
+  notification.style.background = '#444';
+  notification.style.color = 'white';
+  notification.style.padding = '10px 15px';
+  notification.style.borderRadius = '8px';
+  notification.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+  notification.style.zIndex = '1000';
+
+  document.body.appendChild(notification);
+
+  setTimeout(() => {
+    document.body.removeChild(notification);
+  }, 4000);
+}
+
+// ------------------------------
+// Step 5: Start Syncing Periodically
+// ------------------------------
+function startSyncing() {
+  syncWithServer(); // initial sync
+  setInterval(syncWithServer, 10000); // sync every 10s
+}
+
+// ------------------------------
+// Final Initialization
+// ------------------------------
+populateCategories();
+createAddQuoteForm();
+loadLastViewedQuote();
+startSyncing();
