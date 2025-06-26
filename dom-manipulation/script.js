@@ -59,6 +59,7 @@ function addQuote() {
   if (newText && newCategory) {
     quotes.push({ text: newText, category: newCategory });
     saveQuotes();
+    sendQuotesToServer();
     populateCategories();
     document.getElementById('newQuoteText').value = '';
     document.getElementById('newQuoteCategory').value = '';
@@ -201,6 +202,21 @@ async function fetchQuotesFromServer() {
   return serverQuotes;
 }
 
+async function sendQuotesToServer() {
+  try {
+    await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(quotes)
+    });
+    console.log("Quotes sent to server (simulated)");
+  } catch (error) {
+    console.error("Failed to send quotes to server:", error);
+  }
+}
+
 // ------------------------------
 // Sync with Server
 // ------------------------------
@@ -220,6 +236,7 @@ function syncWithServer() {
     if (updated) {
       quotes = Array.from(localQuotesMap.values());
       saveQuotes();
+      sendQuotesToServer();
       populateCategories();
       filterQuotes();
       showNotification("Data synced with server. Server data was used to resolve conflicts.");
