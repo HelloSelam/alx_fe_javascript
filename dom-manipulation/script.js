@@ -9,7 +9,6 @@ let quotes = [
 const quoteDisplay = document.getElementById('quoteDisplay');
 const categorySelect = document.getElementById('categorySelect');
 const newQuoteBtn = document.getElementById('newQuote');
-const addQuoteBtn = document.getElementById('addQuoteBtn');
 
 // Populate categories in the select dropdown
 function populateCategories() {
@@ -44,9 +43,36 @@ function addQuote() {
   }
 }
 
+// Dynamically create the form to add quotes
+function createAddQuoteForm() {
+  const formContainer = document.getElementById('formContainer');
+
+  const heading = document.createElement('h2');
+  heading.innerText = 'Add a New Quote';
+
+  const quoteInput = document.createElement('input');
+  quoteInput.id = 'newQuoteText';
+  quoteInput.type = 'text';
+  quoteInput.placeholder = 'Enter a new quote';
+
+  const categoryInput = document.createElement('input');
+  categoryInput.id = 'newQuoteCategory';
+  categoryInput.type = 'text';
+  categoryInput.placeholder = 'Enter quote category';
+
+  const addButton = document.createElement('button');
+  addButton.innerText = 'Add Quote';
+  addButton.addEventListener('click', addQuote);
+
+  formContainer.appendChild(heading);
+  formContainer.appendChild(quoteInput);
+  formContainer.appendChild(categoryInput);
+  formContainer.appendChild(addButton);
+}
+
 // Event Listeners
 newQuoteBtn.addEventListener('click', showRandomQuote);
-addQuoteBtn.addEventListener('click', addQuote);
 
 // Initialize
 populateCategories();
+createAddQuoteForm();
