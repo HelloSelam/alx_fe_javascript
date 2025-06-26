@@ -188,12 +188,17 @@ let serverQuotes = [
 // ------------------------------
 // Simulate Server Fetch
 // ------------------------------
-function fetchQuotesFromServer() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(serverQuotes);
-    }, 1000);
-  });
+async function fetchQuotesFromServer() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const data = await response.json();
+
+  // Convert posts to quote format (using title as text, and "API" as category)
+  const serverQuotes = data.slice(0, 5).map(post => ({
+    text: post.title,
+    category: "API"
+  }));
+
+  return serverQuotes;
 }
 
 // ------------------------------
