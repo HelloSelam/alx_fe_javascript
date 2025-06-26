@@ -46,10 +46,10 @@ function showRandomQuote() {
   const filteredQuotes = quotes.filter(q => q.category === selectedCategory);
   if (filteredQuotes.length > 0) {
     const randomQuote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
-    quoteDisplay.innerText = `"${randomQuote.text}"`;
+    quoteDisplay.textContent = `"${randomQuote.text}"`;
     sessionStorage.setItem('lastQuote', randomQuote.text);
   } else {
-    quoteDisplay.innerText = 'No quotes available for this category.';
+    quoteDisplay.textContent = 'No quotes available for this category.';
   }
 }
 
@@ -85,7 +85,7 @@ function createAddQuoteForm() {
   const formContainer = document.getElementById('formContainer');
 
   const heading = document.createElement('h2');
-  heading.innerText = 'Add a New Quote';
+  heading.textContent = 'Add a New Quote';
 
   const quoteInput = document.createElement('input');
   quoteInput.id = 'newQuoteText';
@@ -98,7 +98,7 @@ function createAddQuoteForm() {
   categoryInput.placeholder = 'Enter quote category';
 
   const addButton = document.createElement('button');
-  addButton.innerText = 'Add Quote';
+  addButton.textContent = 'Add Quote';
   addButton.addEventListener('click', addQuote);
 
   formContainer.appendChild(heading);
@@ -163,11 +163,11 @@ function filterQuotes() {
   if (visibleQuotes.length > 0) {
     visibleQuotes.forEach(quote => {
       const p = document.createElement('p');
-      p.innerText = `"${quote.text}" — ${quote.category}`;
+      p.textContent = `"${quote.text}" — ${quote.category}`;
       filteredQuotesContainer.appendChild(p);
     });
   } else {
-    filteredQuotesContainer.innerText = 'No quotes found for this category.';
+    filteredQuotesContainer.textContent = 'No quotes found for this category.';
   }
 }
 
@@ -177,7 +177,7 @@ function filterQuotes() {
 function loadLastViewedQuote() {
   const lastQuote = sessionStorage.getItem('lastQuote');
   if (lastQuote && quoteDisplay) {
-    quoteDisplay.innerText = `"${lastQuote}"`;
+    quoteDisplay.textContent = `"${lastQuote}"`;
   }
 }
 
