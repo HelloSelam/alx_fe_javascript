@@ -11,6 +11,13 @@
   <label for="categorySelect">Choose a category:</label>
   <select id="categorySelect"></select>
 
+  <h2>Filter Quotes by Category</h2>
+  <select id="categoryFilter" onchange="filterQuotes()">
+    <option value="all">All Categories</option>
+  </select>
+
+  <div id="filteredQuotes"></div>
+
   <div id="quoteDisplay" style="margin: 20px 0;"></div>
 
   <button id="newQuote">Show New Quote</button>
