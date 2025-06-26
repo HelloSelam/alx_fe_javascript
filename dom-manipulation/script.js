@@ -188,7 +188,7 @@ let serverQuotes = [
 // ------------------------------
 // Simulate Server Fetch
 // ------------------------------
-function fetchServerQuotes() {
+function fetchQuotesFromServer() {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(serverQuotes);
@@ -200,7 +200,7 @@ function fetchServerQuotes() {
 // Sync with Server
 // ------------------------------
 function syncWithServer() {
-  fetchServerQuotes().then((fetchedQuotes) => {
+  fetchQuotesFromServer().then((fetchedQuotes) => {
     let localQuotesMap = new Map(quotes.map(q => [q.text, q]));
     let updated = false;
 
